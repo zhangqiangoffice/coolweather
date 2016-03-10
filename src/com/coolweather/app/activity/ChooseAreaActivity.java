@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -97,13 +98,16 @@ public class ChooseAreaActivity extends Activity {
 			titleText.setText(selectedProvince.getProvinceName());
 			currentLevel = LEVEL_CITY;
 		} else {
-			queryFromServer(selectedProvince.getProvinceCode(), "City");
+			queryFromServer(selectedProvince.getProvinceCode(), "city");
 		}
 	}
 	
 	private void queryCounties() {
+		Log.d("123","before loadCounties");
 		countyList = coolWeatherDB.loadCounties(selectedCity.getId());
+		Log.d("123","after loadCounties");
 		if (countyList.size() > 0) {
+			Log.d("123","countyList.size() > 0");
 			dataList.clear();
 			for (County county : countyList) {
 				dataList.add(county.getCountyName());
@@ -114,6 +118,7 @@ public class ChooseAreaActivity extends Activity {
 			titleText.setText(selectedCity.getCityName());
 			currentLevel = LEVEL_COUNTY; 
 		} else {
+			Log.d("123-getCityCode",selectedCity.getCityCode());
 			queryFromServer(selectedCity.getCityCode(), "county");
 		}
 	}
@@ -126,9 +131,11 @@ public class ChooseAreaActivity extends Activity {
 			address = "http://www.weather.com.cn/data/list3/city.xml";
 		}
 		showProgressDialog();
+		Log.d("123-","after showProgress");
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 			@Override
 			public void onFinish(String response) {
+				Log.d("123-finish", "enter onFinish ");
 				boolean result = false;
 				if ("province".equals(type)) {
 					result = Utility.handleProvincesResponse(coolWeatherDB, response);
@@ -137,6 +144,7 @@ public class ChooseAreaActivity extends Activity {
 				} else if ("county".equals(type)) {
 					result = Utility.handleCountiesResponse(coolWeatherDB, response, selectedCity.getId());
 				}
+				
 				if (result) {
 					runOnUiThread(new Runnable() {
 						@Override
@@ -146,7 +154,7 @@ public class ChooseAreaActivity extends Activity {
 								queryProvinces();
 							} else if ("city".equals(type)) {
 								queryCities();
-							} else if ("coounty".equals(type)) {
+							} else if ("county".equals(type)) {
 								queryCounties();
 							}
 						}

@@ -6,12 +6,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import android.util.Log;
+
 public class HttpUtil {
 	public static void sendHttpRequest(final String address,final HttpCallbackListener listener) {
+		Log.d("123",address);
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				HttpURLConnection connection = null;
+				
 				try {
 					URL url = new URL(address);
 					connection = (HttpURLConnection) url.openConnection();
