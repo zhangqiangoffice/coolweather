@@ -38,7 +38,6 @@ public class Utility {
 	
 	public static boolean handleCitiesResponse(CoolWeatherDB coolWeatherDB,String response,int provinceId) {
 		if (!TextUtils.isEmpty(response)) {
-			Log.d("123-enter2", response);
 			String[] allCities = response.split(",");
 			if (allCities != null && allCities.length > 0) {
 				for (String c : allCities) {
@@ -56,7 +55,6 @@ public class Utility {
 	}
 	
 	public static boolean handleCountiesResponse(CoolWeatherDB coolWeatherDB,String response,int cityId) {
-		Log.d("123-enter handleCountiesResponse",response);
 		if (!TextUtils.isEmpty(response)) {
 			String[] allCounties = response.split(",");
 			if (allCounties != null && allCounties.length > 0) {
